@@ -1,0 +1,13 @@
+apiVersion: s3.aws.crossplane.io/v1beta1
+kind: Bucket
+metadata:
+  name: demo-crossplane-bucket-01
+  labels:
+    docs.crossplane.io/example: provider-aws
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    acl: private
+    locationConstraint: eu-north-1
+  providerConfigRef:
+    name: default

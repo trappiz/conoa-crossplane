@@ -101,6 +101,9 @@ kubectl describe providers provider-aws
 kubectl get crds
 ```
 
+https://marketplace.upbound.io/
+https://marketplace.upbound.io/providers/crossplane-contrib/provider-aws/v0.38.0
+
 ### Create providerconfig
 ```bash
 cat <<EOF > aws-providerconfig.yaml
@@ -119,7 +122,7 @@ EOF
 kubectl apply -f aws-providerconfig.yaml
 ```
 
-### Create S3 bucket as an example
+### Create S3 bucket with dynamic name
 ```bash
 cat <<EOF | kubectl create -f -
 apiVersion: s3.aws.crossplane.io/v1beta1
@@ -138,9 +141,111 @@ spec:
 EOF
 ```
 
-### Deploy an EKS cluster
+### Create S3 bucket with static name
+```bash
+cat <<EOF > s3-bucket.yaml
+apiVersion: s3.aws.crossplane.io/v1beta1
+kind: Bucket
+metadata:
+  name: demo-crossplane-bucket-01
+  labels:
+    docs.crossplane.io/example: provider-aws
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    acl: private
+    locationConstraint: eu-north-1
+  providerConfigRef:
+    name: default
+EOF
 
-Deploy EKS Cluster
+kubectl apply -f s3-bucket.yaml
+```
+
+
+### Create a RDS PostgreSQL
+
+```bash
+cat <<EOF > rds/rds-instance.yaml
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: subnet-a
+spec:
+  forProvider:
+    cidrBlock: 172.31.1.0/24
+    vpcId: vpc-002c8d8307a98f7f5
+    availabilityZone: eu-north-1a
+    region: eu-north-1
+  providerRef:
+    name: aws-provider
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: subnet-b
+spec:
+  forProvider:
+    cidrBlock: 172.31.2.0/24
+    vpcId: vpc-002c8d8307a98f7f5
+    availabilityZone: eu-north-1b
+    region: eu-north-1
+  providerRef:
+    name: aws-provider
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: subnet-c
+spec:
+  forProvider:
+    cidrBlock: 172.31.3.0/24
+    vpcId: vpc-002c8d8307a98f7f5
+    availabilityZone: eu-north-1c
+    region: eu-north-1
+  providerRef:
+    name: aws-provider
+---
+apiVersion: database.aws.crossplane.io/v1beta1
+kind: DBSubnetGroup
+metadata:
+  name: postgres-subnet-group
+spec:
+  forProvider:
+    description: sample group
+    region: eu-north-1
+    subnetIdRefs:
+      - name: subnet-a
+      - name: subnet-b
+      - name: subnet-c
+  providerRef:
+    name: aws-provider
+---
+apiVersion: database.aws.crossplane.io/v1beta1
+kind: RDSInstance
+metadata:
+  name: rdspostgresql
+spec:
+  forProvider:
+    region: eu-north-1
+    dbInstanceClass: db.t3.micro
+    masterUsername: masteruser
+    allocatedStorage: 20
+    engine: postgres
+    engineVersion: "13"
+    skipFinalSnapshotBeforeDeletion: true
+    dbSubnetGroupName: postgres-subnet-group
+  writeConnectionSecretToRef:
+    namespace: crossplane-system
+    name: aws-rdspostgresql-conn
+EOF
+
+
+kubectl create -f rds/rds-instance.yaml
+```
+
+### Deploy an EKS cluster
 
 Deploying EKS cluster with automation is not a trivial task, there are a lot of components that need to be created along, like VPCs, subnets, IAM Roles, node pools, route tables, gateways…
 This is not the experience developers want, but this complexity must go somewhere, there is no magic “Remove complexity” button!
@@ -150,9 +255,16 @@ Instead the process starts with building an XRD (Composite Resource Definition) 
 - schema of the XR (Composite Resource)
 - schema of the XRC (Composite Resource Claim)
 
+https://docs.crossplane.io/v1.11/concepts/composition/
+https://docs.crossplane.io/v1.11/concepts/terminology/
+
 
 ```bash
-kubectl apply -f eks/composition-eks.yaml 
+# Create composition and definition
+kubectl apply -f eks/
+
+
+# Create EKS cluster! :)
 kubectl apply -f eks-cluster-claim.yaml
 ```
 
