@@ -250,7 +250,7 @@ spec:
           cidrBlock: 10.0.0.0/24
           vpcIdSelector:
             matchControllerRef: true
-          mapPublicIPOnLaunch: false
+          mapPublicIPOnLaunch: true
           tags:
             - key: Name
               value: devops-catalog
@@ -271,7 +271,7 @@ spec:
           cidrBlock: 10.0.1.0/24
           vpcIdSelector:
             matchControllerRef: true
-          mapPublicIPOnLaunch: false
+          mapPublicIPOnLaunch: true
           tags:
             - key: Name
               value: devops-catalog
