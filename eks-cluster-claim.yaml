@@ -1,0 +1,17 @@
+apiVersion: crossplane.conoa.se/v1alpha1
+kind: CompositeKubernetesCluster
+metadata:
+  name: devops-team
+  labels:
+    cluster-owner: niklas
+spec:
+  compositionRef:
+    name: cluster-aws
+  parameters:
+    # Possible values small, medium, large
+    nodeSize: small
+    version: "1.24"
+    # minNodeCount: 2
+  writeConnectionSecretToRef:
+    namespace: devops-team
+    name: cluster

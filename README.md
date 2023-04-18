@@ -72,7 +72,7 @@ kubectl get pods -n crossplane-system
 kubectl api-resources | grep crossplane
 ```
 
-### Install AWS provider REMOVE
+### Install AWS provider
 ```bash
 cat <<EOF > provider-aws.yaml
 apiVersion: pkg.crossplane.io/v1
