@@ -52,8 +52,10 @@ minikube start --cpus 4 --memory 8192
 
 
 ### create namespaces
+```bash
 kubectl create ns crossplane-system
 kubectl create ns devops-team
+```
 
 # Installation
 
