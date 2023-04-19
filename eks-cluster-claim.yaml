@@ -10,7 +10,7 @@ spec:
   parameters:
     # Possible values small, medium, large
     nodeSize: small
-    version: "1.24"
+    version: "1.25"
     # minNodeCount: 2
   writeConnectionSecretToRef:
     namespace: devops-team

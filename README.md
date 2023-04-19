@@ -13,6 +13,37 @@ Custom APIs, created by platform teams, allow security and compliance enforcemen
 
 What makes Crossplane so special? First, it builds on Kubernetes and capitalizes on the fact that the real power of Kubernetes is its powerful API model and control plane logic (control loops). It also moves away from Infrastructure as Code to Infrastructure as Data. The difference is that IaC means writing code to describe how the provisioning should happen, whereas IaD means writing pure data files (in the case of Kubernetes YAML) and submitting them to the control component (in the case of Kubernetes an operator) to encapsulate and execute the provisioning logic.
 
+![Image](https://lh5.googleusercontent.com/xyOQeU1pf3gEtLf0CcllWqUEyamGwbO6rgk2r-vpmbT3IWhk7rpc7Y_ZUXPh7XEjwmOJFnUwcbjAEagklpKfaYn6lyl7h0EivGUsHEhEEZmyaPzPAR6N6Fk7fER3NI1bJodunJC_eVpGUH6F-1AaV_bGbozkHGyIlYvfZU9X40H1QM3n3GnAUUETjw)
+
+## Crossplane Terms
+
+### Composition
+Think of it as a terraform module, HCL code that describes how to take input variables and use them to create resources. Seen with Helm eyes this would translate to the template files in a helm chart - GLOBAL
+
+
+### Composite Resource
+Think of it as tfvars for terraform and values.yaml for helm. In short inputs values to variables - GLOBAL
+
+### Composite Resource Claim
+Same as above but namespace scoped 
+
+### Composite Resource Definition
+Think of it as Terraform module that define which variables exist, whether those variables are strings or integers, whether they’re required or optional, etc.
+
+
+### Package
+Packages extend Crossplane, either with support for new kinds of composite resources and claims, or support for new kinds of managed resources. There are two types of Crossplane package; configurations and providers.
+
+
+### Configuration
+A configuration extends Crossplane by installing conceptually related groups of XRDs and Compositions, as well as dependencies like providers or further configurations.
+
+### Provider
+Extends Crossplane by installing controllers for new kinds of managed resources. For example the AWS provider installs support for AWS managed resources like RDSInstance and S3Bucket.
+
+A Provider is a distinct type in the Crossplane API. Note that each Provider package has its own configuration type, called a ProviderConfig. Don’t confuse the two, the former installs the provider while the latter specifies configuration that is relevant to all of its managed resources. A Crossplane provider is the same a provider in Terraform
+§
+
 
 
 ## Create minikube base cluster
