@@ -18,16 +18,16 @@ What makes Crossplane so special? First, it builds on Kubernetes and capitalizes
 ## Crossplane Terms
 
 ### Composition
-Think of it as a terraform module, HCL code that describes how to take input variables and use them to create resources. Seen with Helm eyes this would translate to the template files in a helm chart - GLOBAL
+Think of it as a terraform module, HCL code that describes how to take input variables and use them to create resources. Seen with Helm eyes this would translate to the template files in a helm chart
 
 
-### Composite Resource
-Think of it as tfvars for terraform and values.yaml for helm. In short inputs values to variables - GLOBAL
+### Composite Resource (XR)
+Think of it as tfvars for terraform and values.yaml for helm. In short inputs values to variables
 
-### Composite Resource Claim
-Same as above but namespace scoped 
+### Composite Resource Claim (XRC)
+Same as above but think more team/namespace scoped 
 
-### Composite Resource Definition
+### Composite Resource Definition (XRD)
 Think of it as Terraform module that define which variables exist, whether those variables are strings or integers, whether they’re required or optional, etc.
 
 
