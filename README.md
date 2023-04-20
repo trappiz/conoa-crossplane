@@ -212,7 +212,7 @@ spec:
     availabilityZone: eu-north-1a
     region: eu-north-1
   providerRef:
-    name: aws-provider
+    name: default
 ---
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: Subnet
@@ -225,7 +225,7 @@ spec:
     availabilityZone: eu-north-1b
     region: eu-north-1
   providerRef:
-    name: aws-provider
+    name: default
 ---
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: Subnet
@@ -238,7 +238,7 @@ spec:
     availabilityZone: eu-north-1c
     region: eu-north-1
   providerRef:
-    name: aws-provider
+    name: default
 ---
 apiVersion: database.aws.crossplane.io/v1beta1
 kind: DBSubnetGroup
@@ -253,7 +253,7 @@ spec:
       - name: subnet-b
       - name: subnet-c
   providerRef:
-    name: aws-provider
+    name: default
 ---
 apiVersion: database.aws.crossplane.io/v1beta1
 kind: RDSInstance
